@@ -1,9 +1,13 @@
-
+import json
+import os
+from functools import wraps
 from typing import Any
 import logging
 import pandas as pd
 from datetime import datetime
-
+import requests
+from dotenv import load_dotenv
+from pandas import DataFrame
 from pandas.core.interchange.dataframe_protocol import DataFrame
 from pathlib import Path
 
@@ -125,4 +129,33 @@ def get_dict_info_card(list_transactions: list[dict]) -> dict:
     except Exception as ex:
         logger.error(f"Ошибка получения статистики {ex}")
         return {}
+
+
+def get_last_transactions(list_transactions: list[dict]) -> list[dict]:
+    """ Формирует последние 5 операций по картам из заданного словаря"""
+    i = 0
+
+    result = []
+    logger.info("Сортировка словаря по дате платежа")
+    try:
+        sorted_transactions = sorted(list_transactions, key=lambda x: x["Дата платежа"], reverse=True)
+
+        logger.info("Формирование словаря со статистиками карт")
+        for transaction in sorted_transactions:
+            if i < 5:
+                i += 1
+                logger.info("Получение данных для формирования словаря")
+                answer_dict = {
+                "date": transaction.get("Дата платежа"),
+                "amount": transaction.get("Сумма операции с округлением"),
+                "category": transaction.get("Категория"),
+                "description": transaction.get("Описание"),
+                }
+                result.append(answer_dict)
+                logger.info("В словарь добавлены статистики по карте")
+
+        return result
+    except Exception as ex:
+        logger.error(f"Ошибка формирования последних 5ти операций: {ex}")
+        return []
 
