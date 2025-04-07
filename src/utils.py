@@ -102,3 +102,27 @@ def calculate_cashback(amount: float) -> float:
         logger.error(f"Ошибка расчета кэшбека {ex}")
         return 0
 
+
+def get_dict_info_card(list_transactions: list[dict]) -> dict:
+    """ Получает транзакцию и формирует статистику по каждой карте в виде словаря"""
+    card_totals = {}
+    try:
+        logger.info("Формирование статистики по каждой карте")
+        for t in list_transactions:
+            last_digits = get_last_digits(t["Номер карты"])
+            logger.info("Получен номер карты")
+
+            amount = t["Сумма операции с округлением"]
+            logger.info("Получена сумма операции")
+
+            if last_digits not in card_totals:
+                card_totals[last_digits] = 0.0
+            card_totals[last_digits] += amount
+            logger.info("Карта добавлена в словарь")
+
+        return card_totals
+
+    except Exception as ex:
+        logger.error(f"Ошибка получения статистики {ex}")
+        return {}
+
