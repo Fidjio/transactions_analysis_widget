@@ -1,7 +1,9 @@
+from typing import Any
 import logging
-
+import pandas as pd
 from datetime import datetime
 
+from pandas.core.interchange.dataframe_protocol import DataFrame
 from pathlib import Path
 
 
@@ -31,3 +33,15 @@ def get_greeting() -> str:
         return "Добрый вечер"
     else:
         return "Доброй ночи"
+
+
+def open_xlsx_file(path: str) -> DataFrame | list[Any]:
+    """ Открывает xlsx файл по пути и возвращает dataframe """
+    try:
+        logger.info(f"Открывается файл по пути {path}..")
+        data = pd.read_excel(path)
+        return data
+
+    except Exception as ex:
+        logger.error(f"Ошибка при открытии файла: {ex}")
+        return []
