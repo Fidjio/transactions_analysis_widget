@@ -1,3 +1,4 @@
+
 from typing import Any
 import logging
 import pandas as pd
@@ -88,4 +89,16 @@ def get_last_digits(card_num: int) -> str:
     except Exception as ex:
         logger.error(f"Ошибка извлечения последних цифр карты: {ex}")
         return ""
+
+
+def calculate_cashback(amount: float) -> float:
+    """ Высчитывает кэшбэк от суммы операции (1%)"""
+    try:
+        logger.info("Расчет кэшбека за операцию")
+        result = round(amount * 0.01, 2)
+        return result
+
+    except Exception as ex:
+        logger.error(f"Ошибка расчета кэшбека {ex}")
+        return 0
 
