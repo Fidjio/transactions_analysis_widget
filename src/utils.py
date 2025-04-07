@@ -159,3 +159,52 @@ def get_last_transactions(list_transactions: list[dict]) -> list[dict]:
         logger.error(f"Ошибка формирования последних 5ти операций: {ex}")
         return []
 
+
+def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | str:
+    """ Использует API для получения актуальных котировок валют по отношению к рублю"""
+    try:
+        load_dotenv()
+        API_KEY_FOR_APILAYER = os.getenv("API_KEY_FOR_APILAYER")
+
+        logger.info("Формирует строку из полученного списка с именами котировок")
+        str_symbols = ", ".join(list_currency)
+        return_currency = []
+        url = "https://api.apilayer.com/exchangerates_data/latest"
+
+        params = {
+            "base": "RUB",  # Базовая валюта: рубль
+            "symbols": str_symbols # Валюты для сравнения
+        }
+
+        headers = {
+            "apikey": API_KEY_FOR_APILAYER  # Передаём ключ в заголовках
+        }
+
+        try:
+            logger.info(f"Запрос на получения данных с API {url}")
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()  # Проверка на ошибки HTTP
+
+            logger.info("Запись полученной информации в формате json")
+            data = response.json()
+
+            # Выводим курсы
+            logger.info("Вывод курсов валют")
+            for currency, rate in data["rates"].items():
+                result = {
+                "currency": currency,
+                "rate": round(1 / rate, 2) # Конвертируем в "1 USD = X RUB"
+                }
+                return_currency.append(result)
+                logger.info("Добавление в список словаря с полученными курсами валют")
+
+            return return_currency
+
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Ошибка при получении данных с API {url}")
+            return f"Ошибка запроса: {e}"
+
+    except Exception as ex:
+        logger.info(f"Ошибка при работе с получением или преобразованием курса валют: {ex}")
+        return []
+
