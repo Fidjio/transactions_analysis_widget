@@ -220,3 +220,36 @@ def read_json(path: str) -> Any:
         logger.error(f"Ошибка чтения файла json {ex}")
         return []
 
+
+def get_stock_prices(list_stock: list) -> list[dict[str, Any]]:
+    """ Принимает список названий акций и возвращает словарь с ценами """
+    try:
+        result = []
+
+        load_dotenv()
+        API_KEY_FOR_ALFAVANTAGE = os.getenv("API_KEY_FOR_ALFAVANTAGE")
+
+        logger.info("Формирование словаря с ценами на акции")
+        for symbol in list_stock:
+            url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={API_KEY_FOR_ALFAVANTAGE}"
+            url_for_log = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey=API_KEY_FOR_ALFAVANTAGE"
+
+            logger.info(f"Получение данных по запросу к API {url_for_log}")
+            response = requests.get(url)
+
+            logger.info("Запись полученных данных в json формате")
+            data = response.json()
+
+            logger.info("Формирование словаря с полученными значениями цен акций")
+            tmp_dict_stocks = {
+                "stock": symbol,
+                "price": data['Global Quote']['05. price']
+            }
+
+            logger.info("Добавление словаря к возвращаемому результату")
+            result.append(tmp_dict_stocks)
+
+        return result
+    except Exception as ex:
+        logger.error(f"Ошибка при получении данных или формировании цен по акциям: {ex}")
+        return []
