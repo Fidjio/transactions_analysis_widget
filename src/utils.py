@@ -1,18 +1,33 @@
-import json
+import logging
+
 from datetime import datetime
-import requests  # Для запросов к API курсов валют и акций
+
+from pathlib import Path
 
 
-def get_greeting(time_str):
-    """Возвращает приветствие в зависимости от времени."""
-    time = datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S").time()
-    hour = time.hour
+log_file = Path(__file__).parent.parent / 'logs' / 'utils.log'
+logger = logging.getLogger("utils")
+logger.setLevel(logging.INFO)
 
-    if 5 <= hour < 12:
+for handler in logger.handlers[:]:
+    logger.removeHandler(handler)
+
+logger.propagate = False
+file_handler = logging.FileHandler(log_file, encoding="UTF-8", mode="w")
+file_formatter = logging.Formatter('%(asctime)s: modul - %(name)s, func:%(funcName)s --%(levelname)s--\n %(message)s')
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+
+def get_greeting() -> str:
+    """ В зависимости от времени суток выдает приветствие"""
+    current_hour = datetime.now().hour
+    logger.info("работает функция выбора приветственного сообщения")
+    if 5 <= current_hour < 12:
         return "Доброе утро"
-    elif 12 <= hour < 18:
+    elif 12 <= current_hour < 18:
         return "Добрый день"
-    elif 18 <= hour < 23:
+    elif 18 <= current_hour < 23:
         return "Добрый вечер"
     else:
         return "Доброй ночи"
