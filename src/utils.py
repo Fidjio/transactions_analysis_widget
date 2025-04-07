@@ -208,3 +208,15 @@ def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | 
         logger.info(f"Ошибка при работе с получением или преобразованием курса валют: {ex}")
         return []
 
+
+def read_json(path: str) -> Any:
+    """ Читает файл json и возвращает список словарей"""
+    try:
+        logger.info(f"Чтение файла json по пути {path}")
+        with open(path, 'r') as file:
+            reader = json.load(file)
+            return reader
+    except Exception as ex:
+        logger.error(f"Ошибка чтения файла json {ex}")
+        return []
+
