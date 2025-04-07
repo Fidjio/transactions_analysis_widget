@@ -77,3 +77,15 @@ def filter_by_date(df_transactions: DataFrame, user_date: str) -> list[Any] | An
     except Exception as ex:
         logger.error(f"Ошибка при фильтрации по дате: {ex}")
         return []
+
+
+def get_last_digits(card_num: int) -> str:
+    """ Извлекает последние 4 цифры из номера карты"""
+    try:
+        logger.info("Извлечение последних 4 цифр карты")
+        return str(card_num)[-4:]
+
+    except Exception as ex:
+        logger.error(f"Ошибка извлечения последних цифр карты: {ex}")
+        return ""
+
