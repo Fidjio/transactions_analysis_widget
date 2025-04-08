@@ -41,7 +41,7 @@ def get_info_for_page_main(date_user):
         currency_rates = get_now_currency(user_setting.get("user_currencies"))
 
         logger.info(f"Получение словаря с акциями и их ценами с помощью функции {get_now_currency.__name__}")
-        # stock_prices = get_stock_prices(user_setting.get("user_stocks"))
+        stock_prices = get_stock_prices(user_setting.get("user_stocks"))
 
         # Формируем итоговый JSON
         logger.info(f"Формирование списка словарей по картам (используются данные last_digits,"
@@ -62,10 +62,8 @@ def get_info_for_page_main(date_user):
             "greeting": "Добрый день",
             "cards": cards,
             "top_transactions": top_transactions,
-            "currency_rates": 1,
             "currency_rates": currency_rates,
-            # "stock_prices": stock_prices,
-            "stock_prices": 1,
+            "stock_prices": stock_prices,
         }
 
         json_result = json.dumps(result, indent=4, ensure_ascii=False)
