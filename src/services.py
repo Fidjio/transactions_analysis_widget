@@ -3,7 +3,6 @@ import re
 import json
 from pathlib import Path
 
-
 logger = logging.getLogger("services")
 logger.setLevel(logging.INFO)
 
@@ -24,14 +23,14 @@ def search_name(list_dict_t):
         return json.dumps([], ensure_ascii=False, indent=4)  # Пустой JSON-массив
 
     pattern = re.compile(
-        r'(?<!\S)[А-ЯЁ][а-яё]+\s[А-ЯЁA-Z][^а-яёa-z]\.?(?!\S)',
+        r'(?<!\S)[А-ЯЁ][а-яё]+\s[А-ЯЁ]\.\s?[А-ЯЁ]\.?(?!\S)',
         re.IGNORECASE
     )
     filtered_transactions = []
     logger.info("Начало работы функции по поиску имени в транзакции")
     for transaction in list_dict_t:
         try:
-            if type(transaction.get("Категория", "")) != float:
+            if not isinstance(transaction.get("Категория"), (float, type(None))):
                 logger.info("Получение категории из списка транзакций")
                 category = transaction.get("Категория", "").lower()
 

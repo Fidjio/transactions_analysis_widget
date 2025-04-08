@@ -32,10 +32,12 @@ def get_reports_dec(name_file="reports.json"):
                 with open(path_to_file, 'w', encoding='utf-8') as f:
                     json.dump(data, f, indent=4, ensure_ascii=False)
                 logger.info("Запись файла закончена!")
-                return data
+                if data != '[\n\n]':
+                    return data
+                return []
             except Exception as ex:
                 logger.error(f"Произошла ошибка в декораторе при работе с функцией {func.__name__}: {ex}")
-                return None
+                return '[]'
 
         return inner
     return wrapper
