@@ -178,3 +178,4 @@ cython_debug/
 # API
 # Hidden API data
 .env
+data/
