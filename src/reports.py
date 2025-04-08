@@ -21,6 +21,27 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
+def get_reports_dec(name_file="reports.json"):
+    def wrapper(func):
+        @wraps(func)
+        def inner(*args, **kwargs):
+            try:
+                logger.info(f"Декоратор начал работу с заданным именем файла {name_file}")
+                data = func(*args, **kwargs)
+                path_to_file = os.path.join(os.path.abspath("reports/"), name_file)
+                with open(path_to_file, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=4, ensure_ascii=False)
+                logger.info("Запись файла закончена!")
+                return data
+            except Exception as ex:
+                logger.error(f"Произошла ошибка в декораторе при работе с функцией {func.__name__}: {ex}")
+                return None
+
+        return inner
+    return wrapper
+
+
+@get_reports_dec()
 def spending_by_category(transactions: pd.DataFrame,
                          category: str,
                          date: Optional[str] = None) -> str | Any:
