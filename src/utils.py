@@ -1,13 +1,11 @@
 import json
 import os
-from functools import wraps
 from typing import Any
 import logging
 import pandas as pd
 from datetime import datetime
 import requests
 from dotenv import load_dotenv
-from pandas import DataFrame
 from pandas.core.interchange.dataframe_protocol import DataFrame
 from pathlib import Path
 
@@ -224,8 +222,14 @@ def get_stock_prices(list_stock: list) -> list[dict[str, Any]]:
 
         logger.info("Формирование словаря с ценами на акции")
         for symbol in list_stock:
-            url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={API_KEY_FOR_ALFAVANTAGE}"
-            url_for_log = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey=API_KEY_FOR_ALFAVANTAGE"
+            url = (
+                f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}"
+                f"&apikey={API_KEY_FOR_ALFAVANTAGE}"
+            )
+            url_for_log = (
+                f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}"
+                f"&apikey=API_KEY_FOR_ALFAVANTAGE"
+            )
 
             logger.info(f"Получение данных по запросу к API {url_for_log}")
             response = requests.get(url)
