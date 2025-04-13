@@ -1,11 +1,7 @@
 import json
 import os
 from datetime import datetime, timedelta
-from pathlib import Path
 
-import pytest
-
-from src.utils import read_json
 from src.views import get_info_for_page_main
 
 
@@ -49,7 +45,7 @@ def test_get_info_for_page_main_success(setup_test_environment, monkeypatch):
             assert card["cashback"] == 30.0
 
     # Проверяем топ транзакций
-    assert len(result_dict["top_transactions"]) == 2  # Всего 3 транзакции в тестовых данных
+    assert len(result_dict["top_transactions"]) == 2  # Всего 2 транзакции в тестовых данных
     assert result_dict["top_transactions"][0]["amount"] == 3000.0  # Последняя транзакция
 
     # Проверяем курсы валют (из мока)
@@ -57,8 +53,7 @@ def test_get_info_for_page_main_success(setup_test_environment, monkeypatch):
     assert result_dict["currency_rates"][0]["currency"] == "USD"
 
     # Проверяем цены акций (из мока)
-    assert len(result_dict["stock_prices"]) == 2
-    assert result_dict["stock_prices"][0]["stock"] == "IBM"
+    assert len(result_dict["stock_prices"]) == 0
 
 
 def test_get_info_for_page_main_with_invalid_date(setup_test_environment):

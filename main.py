@@ -15,7 +15,8 @@ if __name__ == "__main__":
     df_transactions = open_xlsx_file(".\\data\\operations.xlsx")
 
     # Запуск функции, которая фильтрует транзакции оставляя переводы только от физ лиц
-    search_name(df_transactions.to_dict("records"))
+    list_dict_transactions = df_transactions.to_dict("records")
+    # print(search_name(list_dict_transactions))
 
     # Запуск функции, которая возвращает транзакции по определенной категории за определенный период времени
     spending_by_category(df_transactions, "Переводы", "31.12.2021")

@@ -6,8 +6,18 @@ import pandas as pd
 import pytest
 from pandas import DataFrame
 
-from src.utils import (calculate_cashback, filter_by_date, get_dict_info_card, get_greeting, get_last_digits,
-                       get_last_transactions, get_now_currency, get_stock_prices, open_xlsx_file, read_json)
+from src.utils import (
+    calculate_cashback,
+    filter_by_date,
+    get_dict_info_card,
+    get_greeting,
+    get_last_digits,
+    get_last_transactions,
+    get_now_currency,
+    get_stock_prices,
+    open_xlsx_file,
+    read_json,
+)
 
 
 # Тесты для get_greeting()

@@ -23,7 +23,10 @@ def search_name(list_dict_t: List[Dict[str, Any]]) -> str:
     if not list_dict_t:
         return json.dumps([], ensure_ascii=False, indent=4)  # Пустой JSON-массив
 
-    pattern = re.compile(r"(?<!\S)[А-ЯЁ][а-яё]+\s[А-ЯЁ]\.\s?[А-ЯЁ]\.?(?!\S)", re.IGNORECASE)
+    pattern = re.compile(
+        r'(?<!\S)[А-ЯЁ][а-яё]+(?:-[А-ЯЁ][а-яё]+)*\s[А-ЯЁ]\.\s?[А-ЯЁ]\.(?!\S)',
+        re.IGNORECASE
+    )
     filtered_transactions = []
     logger.info("Начало работы функции по поиску имени в транзакции")
     for transaction in list_dict_t:
@@ -44,4 +47,5 @@ def search_name(list_dict_t: List[Dict[str, Any]]) -> str:
             print(f"Ошибка в обработке транзакции: {transaction}. Ошибка: {ex}")
             continue
 
-    return json.dumps(filtered_transactions, ensure_ascii=False, indent=4)
+    result = json.dumps(filtered_transactions, ensure_ascii=False, indent=4)
+    return result
