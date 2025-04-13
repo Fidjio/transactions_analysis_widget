@@ -40,3 +40,11 @@ def sample_transactions_for_services():
 def empty_transactions():
     """Фикстура с пустым списком транзакций"""
     return []
+
+
+@pytest.fixture
+def sample_transactions_for_utils():
+    return pd.DataFrame({
+        "Дата операции": ["01.01.2023 12:00:00", "15.01.2023 12:00:00", "31.01.2023 12:00:00"],
+        "Сумма операции": [100, 200, 300]
+    })
