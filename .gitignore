@@ -177,4 +177,7 @@ cython_debug/
 
 # API
 # Hidden API data
-.env
+data/
+
+# Hidden reports
+reports/
