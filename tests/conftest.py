@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 import pytest
 
@@ -48,3 +50,73 @@ def sample_transactions_for_utils():
         "Дата операции": ["01.01.2023 12:00:00", "15.01.2023 12:00:00", "31.01.2023 12:00:00"],
         "Сумма операции": [100, 200, 300]
     })
+
+
+@pytest.fixture
+def sample_transactions_for_views():
+    return [
+        {'card': '1234', 'amount': 100, 'date': '01.01.2023', 'category': 'food'},
+        {'card': '1234', 'amount': 200, 'date': '02.01.2023', 'category': 'transport'},
+        {'card': '5678', 'amount': 300, 'date': '03.01.2023', 'category': 'food'}
+    ]
+
+
+@pytest.fixture
+def mock_user_settings():
+    return {
+        "user_currencies": ["USD", "EUR"],
+        "user_stocks": ["AAPL", "GOOGL"]
+    }
+
+
+# Подготовка тестовых данных
+@pytest.fixture
+def setup_test_environment(tmp_path):
+    # Создаем тестовый Excel файл с транзакциями
+    test_data = [
+        {
+            "Дата операции": "01.01.2023 12:00:00",
+            "Номер карты": 1234567890123456,
+            "Сумма операции с округлением": 1000.0,
+            "Категория": "Еда",
+            "Описание": "Ресторан",
+            "Дата платежа": "01.01.2023"
+        },
+        {
+            "Дата операции": "15.01.2023 12:00:00",
+            "Номер карты": 1234567890123456,
+            "Сумма операции с округлением": 2000.0,
+            "Категория": "Транспорт",
+            "Описание": "Такси",
+            "Дата платежа": "15.01.2023"
+        },
+        {
+            "Дата операции": "31.01.2023 12:00:00",
+            "Номер карты": 9876543210987654,
+            "Сумма операции с округлением": 3000.0,
+            "Категория": "Развлечения",
+            "Описание": "Кино",
+            "Дата платежа": "31.01.2023"
+        }
+    ]
+
+    # Создаем тестовый файл user_settings.json
+    user_settings = {
+        "user_currencies": ["USD", "EUR"],
+        "user_stocks": ["IBM", "AAPL"]
+    }
+
+    # Создаем директорию data если ее нет
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+
+    # Сохраняем тестовые данные
+    import pandas as pd
+    df = pd.DataFrame(test_data)
+    df.to_excel(data_dir / "operations.xlsx", index=False)
+
+    with open(data_dir / "user_settings.json", "w") as f:
+        json.dump(user_settings, f)
+
+    # Возвращаем путь к временной директории
+    return tmp_path
