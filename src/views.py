@@ -3,8 +3,7 @@ import logging
 from pathlib import Path
 
 from src.utils import open_xlsx_file, filter_by_date, get_dict_info_card, calculate_cashback, get_last_transactions, \
-    read_json, get_now_currency, get_stock_prices
-
+    read_json, get_now_currency, get_stock_prices, get_greeting
 
 logger = logging.getLogger("views")
 logger.setLevel(logging.INFO)
@@ -59,7 +58,7 @@ def get_info_for_page_main(date_user):
 
         logger.info("Формирование конечного результата с помощью полученных данных")
         result = {
-            "greeting": "Добрый день",
+            "greeting": get_greeting(),
             "cards": cards,
             "top_transactions": top_transactions,
             "currency_rates": currency_rates,
@@ -71,4 +70,4 @@ def get_info_for_page_main(date_user):
 
     except Exception as ex:
         logger.error(f"Ошибка при работе программы {ex}")
-        return f"Ошибка {ex}"
+        return json.dumps({"error": str(ex)})
