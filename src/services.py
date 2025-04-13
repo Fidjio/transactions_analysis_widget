@@ -2,6 +2,7 @@ import logging
 import re
 import json
 from pathlib import Path
+from typing import Dict, List, Any
 
 logger = logging.getLogger("services")
 logger.setLevel(logging.INFO)
@@ -15,7 +16,7 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def search_name(list_dict_t):
+def search_name(list_dict_t: List[Dict[str, Any]]) -> str:
     """Фильтрует список транзакций, оставляя только переводы от физ. лиц (с именем и инициалом в описании),
     и возвращает результат в формате JSON."""
     logger.info("Проверка на наличие переданных данных")

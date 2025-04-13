@@ -2,12 +2,12 @@ import json
 import logging
 import os
 from datetime import datetime
-from functools import wraps
+from functools import wraps, _Wrapped
 from pathlib import Path
 from typing import Optional, Any
 import pandas as pd
 from dateutil.relativedelta import relativedelta
-
+from mypy_extensions import VarArg, KwArg
 
 logger = logging.getLogger("reports")
 logger.setLevel(logging.INFO)
@@ -20,11 +20,22 @@ file_formatter = logging.Formatter("%(asctime)s: modul - %(name)s, func:%(funcNa
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
+from typing import Any, Callable, TypeVar, Optional, Union
+import os
+import json
+from functools import wraps
+import logging
 
-def get_reports_dec(name_file="reports.json"):
-    def wrapper(func):
+logger = logging.getLogger(__name__)
+
+# Тип для функции, которую можно декорировать
+F = TypeVar('F', bound=_Wrapped[[VarArg(Any), KwArg(Any)], Any, [VarArg(Any), KwArg(Any)], Any | list[Any] | str])
+
+
+def get_reports_dec(name_file: str = "reports.json") -> Callable[[F], F]:
+    def wrapper(func: F) -> F:
         @wraps(func)
-        def inner(*args, **kwargs):
+        def inner(*args: Any, **kwargs: Any) -> Union[Any, list, str]:
             try:
                 logger.info(f"Декоратор начал работу с заданным именем файла {name_file}")
                 data = func(*args, **kwargs)

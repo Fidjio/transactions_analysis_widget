@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any
+from typing import Any, Dict, List, Optional, Union
 import logging
 import pandas as pd
 from datetime import datetime
@@ -159,7 +159,7 @@ def get_last_transactions(list_transactions: list[dict]) -> list[dict]:
         return []
 
 
-def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | str:
+def get_now_currency(list_currency: List[str]) -> Union[List[Dict[str, Union[str, float]]], str]:
     """Использует API для получения актуальных котировок валют по отношению к рублю"""
     try:
         load_dotenv()
@@ -212,7 +212,7 @@ def read_json(path: str) -> Any:
         return []
 
 
-def get_stock_prices(list_stock: list) -> list[dict[str, Any]]:
+def get_stock_prices(list_stock: List[str]) -> List[Dict[str, Union[str, float]]]:
     """Принимает список названий акций и возвращает словарь с ценами"""
     try:
         result = []

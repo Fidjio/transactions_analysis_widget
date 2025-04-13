@@ -26,7 +26,7 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def get_info_for_page_main(date_user):
+def get_info_for_page_main(date_user: str) -> str:
     """Функция для работы страницы Главная.
     Принимает дату и возвращает json-ответ"""
     try:
