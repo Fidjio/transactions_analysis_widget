@@ -10,9 +10,10 @@ def sample_transactions_for_reports():
     data = {
         "Дата платежа": ["01.01.2023", "15.02.2023", "10.03.2023", "05.04.2023", "20.05.2023", "08.03.2025"],
         "Категория": ["Еда", "Транспорт", "Еда", "Развлечения", "Еда", "Еда"],
-        "Сумма операции": [100, 200, 150, 300, 250, 200]
+        "Сумма операции": [100, 200, 150, 300, 250, 200],
     }
     return pd.DataFrame(data)
+
 
 @pytest.fixture
 def sample_transactions_with_nan():
@@ -20,9 +21,10 @@ def sample_transactions_with_nan():
     data = {
         "Дата платежа": ["01.01.2023", "15.02.2023", "10.03.2023", "05.04.2023"],
         "Категория": ["Еда", None, "Еда", "Развлечения"],
-        "Сумма операции": [100, None, 150, 300]
+        "Сумма операции": [100, None, 150, 300],
     }
     return pd.DataFrame(data)
+
 
 @pytest.fixture
 def sample_transactions_for_services():
@@ -46,27 +48,26 @@ def empty_transactions():
 
 @pytest.fixture
 def sample_transactions_for_utils():
-    return pd.DataFrame({
-        "Дата операции": ["01.01.2023 12:00:00", "15.01.2023 12:00:00", "31.01.2023 12:00:00"],
-        "Сумма операции": [100, 200, 300]
-    })
+    return pd.DataFrame(
+        {
+            "Дата операции": ["01.01.2023 12:00:00", "15.01.2023 12:00:00", "31.01.2023 12:00:00"],
+            "Сумма операции": [100, 200, 300],
+        }
+    )
 
 
 @pytest.fixture
 def sample_transactions_for_views():
     return [
-        {'card': '1234', 'amount': 100, 'date': '01.01.2023', 'category': 'food'},
-        {'card': '1234', 'amount': 200, 'date': '02.01.2023', 'category': 'transport'},
-        {'card': '5678', 'amount': 300, 'date': '03.01.2023', 'category': 'food'}
+        {"card": "1234", "amount": 100, "date": "01.01.2023", "category": "food"},
+        {"card": "1234", "amount": 200, "date": "02.01.2023", "category": "transport"},
+        {"card": "5678", "amount": 300, "date": "03.01.2023", "category": "food"},
     ]
 
 
 @pytest.fixture
 def mock_user_settings():
-    return {
-        "user_currencies": ["USD", "EUR"],
-        "user_stocks": ["AAPL", "GOOGL"]
-    }
+    return {"user_currencies": ["USD", "EUR"], "user_stocks": ["AAPL", "GOOGL"]}
 
 
 # Подготовка тестовых данных
@@ -80,7 +81,7 @@ def setup_test_environment(tmp_path):
             "Сумма операции с округлением": 1000.0,
             "Категория": "Еда",
             "Описание": "Ресторан",
-            "Дата платежа": "01.01.2023"
+            "Дата платежа": "01.01.2023",
         },
         {
             "Дата операции": "15.01.2023 12:00:00",
@@ -88,7 +89,7 @@ def setup_test_environment(tmp_path):
             "Сумма операции с округлением": 2000.0,
             "Категория": "Транспорт",
             "Описание": "Такси",
-            "Дата платежа": "15.01.2023"
+            "Дата платежа": "15.01.2023",
         },
         {
             "Дата операции": "31.01.2023 12:00:00",
@@ -96,15 +97,12 @@ def setup_test_environment(tmp_path):
             "Сумма операции с округлением": 3000.0,
             "Категория": "Развлечения",
             "Описание": "Кино",
-            "Дата платежа": "31.01.2023"
-        }
+            "Дата платежа": "31.01.2023",
+        },
     ]
 
     # Создаем тестовый файл user_settings.json
-    user_settings = {
-        "user_currencies": ["USD", "EUR"],
-        "user_stocks": ["IBM", "AAPL"]
-    }
+    user_settings = {"user_currencies": ["USD", "EUR"], "user_stocks": ["IBM", "AAPL"]}
 
     # Создаем директорию data если ее нет
     data_dir = tmp_path / "data"
@@ -112,6 +110,7 @@ def setup_test_environment(tmp_path):
 
     # Сохраняем тестовые данные
     import pandas as pd
+
     df = pd.DataFrame(test_data)
     df.to_excel(data_dir / "operations.xlsx", index=False)
 

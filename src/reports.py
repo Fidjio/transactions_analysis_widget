@@ -15,8 +15,8 @@ logger.setLevel(logging.INFO)
 for handler in logger.handlers[:]:
     logger.removeHandler(handler)
 
-file_handler = logging.FileHandler(Path(__file__).parent.parent / 'logs' / 'reports.log', encoding="UTF-8", mode="w")
-file_formatter = logging.Formatter('%(asctime)s: modul - %(name)s, func:%(funcName)s --%(levelname)s--\n %(message)s')
+file_handler = logging.FileHandler(Path(__file__).parent.parent / "logs" / "reports.log", encoding="UTF-8", mode="w")
+file_formatter = logging.Formatter("%(asctime)s: modul - %(name)s, func:%(funcName)s --%(levelname)s--\n %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
@@ -29,31 +29,32 @@ def get_reports_dec(name_file="reports.json"):
                 logger.info(f"Декоратор начал работу с заданным именем файла {name_file}")
                 data = func(*args, **kwargs)
                 path_to_file = os.path.join(os.path.abspath("reports/"), name_file)
-                with open(path_to_file, 'w', encoding='utf-8') as f:
+                with open(path_to_file, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=4, ensure_ascii=False)
                 logger.info("Запись файла закончена!")
-                if data != '[\n\n]':
+                if data != "[\n\n]":
                     return data
                 return []
             except Exception as ex:
                 logger.error(f"Произошла ошибка в декораторе при работе с функцией {func.__name__}: {ex}")
-                return '[]'
+                return "[]"
 
         return inner
+
     return wrapper
 
 
 @get_reports_dec()
-def spending_by_category(transactions: pd.DataFrame,
-                         category: str,
-                         date: Optional[str] = None) -> str | Any:
-    """ Функция возвращает траты по заданной категории за последние три месяца (от переданной даты). """
+def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> str | Any:
+    """Функция возвращает траты по заданной категории за последние три месяца (от переданной даты)."""
     try:
         logger.info("Функция начала работу")
         df_transaction = transactions.copy()
 
         logger.info("Конвертирование столбца dataframe['Дата платежа'] из строки в datatime")
-        df_transaction["Дата платежа"] = pd.to_datetime(df_transaction["Дата платежа"], format='%d.%m.%Y', dayfirst=True)
+        df_transaction["Дата платежа"] = pd.to_datetime(
+            df_transaction["Дата платежа"], format="%d.%m.%Y", dayfirst=True
+        )
 
         if not date:
             date_now = datetime.now()
@@ -69,8 +70,9 @@ def spending_by_category(transactions: pd.DataFrame,
         end_date = use_date.replace()
         # Фильтруем dataframe на диапазон дат в 3 месяца
 
-        filtered = df_transaction[(df_transaction["Дата платежа"] >= start_date) &
-                                (df_transaction["Дата платежа"] <= end_date)]
+        filtered = df_transaction[
+            (df_transaction["Дата платежа"] >= start_date) & (df_transaction["Дата платежа"] <= end_date)
+        ]
         logger.info("DataFrame отфильтрован по диапазону дат")
 
         # Удаляем все значения NaN из df если такие имеются
@@ -82,9 +84,9 @@ def spending_by_category(transactions: pd.DataFrame,
 
         # Конвертируем df в json
         json_str = result.to_json(
-            orient='records',  # Формат вывода
+            orient="records",  # Формат вывода
             force_ascii=False,  # Сохраняем кириллицу
-            indent=4  # Красивое форматирование (опционально)
+            indent=4,  # Красивое форматирование (опционально)
         )
         logger.info("DataFrame конвертирован в json для возврата результата функции")
 

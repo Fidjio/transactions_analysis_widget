@@ -11,16 +11,10 @@ from src.utils import read_json
 def test_get_info_for_page_main_success(setup_test_environment, monkeypatch):
     # Мокируем API запросы, чтобы тесты не зависели от внешних сервисов
     def mock_get_now_currency(currencies):
-        return [
-            {"currency": "USD", "rate": 75.5},
-            {"currency": "EUR", "rate": 85.2}
-        ]
+        return [{"currency": "USD", "rate": 75.5}, {"currency": "EUR", "rate": 85.2}]
 
     def mock_get_stock_prices(stocks):
-        return [
-            {"stock": "IBM", "price": "120.50"},
-            {"stock": "AAPL", "price": "150.75"}
-        ]
+        return [{"stock": "IBM", "price": "120.50"}, {"stock": "AAPL", "price": "150.75"}]
 
     # Применяем моки
     monkeypatch.setattr("src.utils.get_now_currency", mock_get_now_currency)

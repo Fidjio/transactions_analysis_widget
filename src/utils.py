@@ -12,7 +12,7 @@ from pandas.core.interchange.dataframe_protocol import DataFrame
 from pathlib import Path
 
 
-log_file = Path(__file__).parent.parent / 'logs' / 'utils.log'
+log_file = Path(__file__).parent.parent / "logs" / "utils.log"
 logger = logging.getLogger("utils")
 logger.setLevel(logging.INFO)
 
@@ -21,13 +21,13 @@ for handler in logger.handlers[:]:
 
 logger.propagate = False
 file_handler = logging.FileHandler(log_file, encoding="UTF-8", mode="w")
-file_formatter = logging.Formatter('%(asctime)s: modul - %(name)s, func:%(funcName)s --%(levelname)s--\n %(message)s')
+file_formatter = logging.Formatter("%(asctime)s: modul - %(name)s, func:%(funcName)s --%(levelname)s--\n %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
 def get_greeting() -> str:
-    """ В зависимости от времени суток выдает приветствие"""
+    """В зависимости от времени суток выдает приветствие"""
     current_hour = datetime.now().hour
     logger.info("работает функция выбора приветственного сообщения")
     if 5 <= current_hour < 12:
@@ -41,7 +41,7 @@ def get_greeting() -> str:
 
 
 def open_xlsx_file(path: str) -> DataFrame | list[Any]:
-    """ Открывает xlsx файл по пути и возвращает dataframe """
+    """Открывает xlsx файл по пути и возвращает dataframe"""
     try:
         logger.info(f"Открывается файл по пути {path}..")
         data = pd.read_excel(path)
@@ -59,9 +59,10 @@ def filter_by_date(df_transactions: DataFrame, user_date: str) -> list[Any] | An
         df_transactions = df_transactions.copy()
         logger.info("Преобразование столбца с датой полученного DataFrame..")
         # Преобразуем столбец с датой в datetime и устанавливаем его как индекс
-        df_transactions['Дата операции'] = pd.to_datetime(df_transactions['Дата операции'],
-                                                          dayfirst=True, format="%d.%m.%Y %H:%M:%S")
-        df_transactions = df_transactions.set_index('Дата операции')
+        df_transactions["Дата операции"] = pd.to_datetime(
+            df_transactions["Дата операции"], dayfirst=True, format="%d.%m.%Y %H:%M:%S"
+        )
+        df_transactions = df_transactions.set_index("Дата операции")
 
         logger.info("Сортировка индекса (индекс столбец с датами)")
         # Сортируем индекс для корректной работы срезов
@@ -85,7 +86,7 @@ def filter_by_date(df_transactions: DataFrame, user_date: str) -> list[Any] | An
 
 
 def get_last_digits(card_num: int) -> str:
-    """ Извлекает последние 4 цифры из номера карты"""
+    """Извлекает последние 4 цифры из номера карты"""
     try:
         logger.info("Извлечение последних 4 цифр карты")
         return str(card_num)[-4:]
@@ -96,7 +97,7 @@ def get_last_digits(card_num: int) -> str:
 
 
 def calculate_cashback(amount: float) -> float:
-    """ Высчитывает кэшбэк от суммы операции (1%)"""
+    """Высчитывает кэшбэк от суммы операции (1%)"""
     try:
         logger.info("Расчет кэшбека за операцию")
         result = round(amount * 0.01, 2)
@@ -108,7 +109,7 @@ def calculate_cashback(amount: float) -> float:
 
 
 def get_dict_info_card(list_transactions: list[dict]) -> dict:
-    """ Получает транзакцию и формирует статистику по каждой карте в виде словаря"""
+    """Получает транзакцию и формирует статистику по каждой карте в виде словаря"""
     card_totals = {}
     try:
         logger.info("Формирование статистики по каждой карте")
@@ -132,7 +133,7 @@ def get_dict_info_card(list_transactions: list[dict]) -> dict:
 
 
 def get_last_transactions(list_transactions: list[dict]) -> list[dict]:
-    """ Формирует последние 5 операций по картам из заданного словаря"""
+    """Формирует последние 5 операций по картам из заданного словаря"""
     i = 0
 
     result = []
@@ -146,10 +147,10 @@ def get_last_transactions(list_transactions: list[dict]) -> list[dict]:
                 i += 1
                 logger.info("Получение данных для формирования словаря")
                 answer_dict = {
-                "date": transaction.get("Дата платежа"),
-                "amount": transaction.get("Сумма операции с округлением"),
-                "category": transaction.get("Категория"),
-                "description": transaction.get("Описание"),
+                    "date": transaction.get("Дата платежа"),
+                    "amount": transaction.get("Сумма операции с округлением"),
+                    "category": transaction.get("Категория"),
+                    "description": transaction.get("Описание"),
                 }
                 result.append(answer_dict)
                 logger.info("В словарь добавлены статистики по карте")
@@ -161,7 +162,7 @@ def get_last_transactions(list_transactions: list[dict]) -> list[dict]:
 
 
 def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | str:
-    """ Использует API для получения актуальных котировок валют по отношению к рублю"""
+    """Использует API для получения актуальных котировок валют по отношению к рублю"""
     try:
         load_dotenv()
         API_KEY_FOR_APILAYER = os.getenv("API_KEY_FOR_APILAYER")
@@ -171,14 +172,9 @@ def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | 
         return_currency = []
         url = "https://api.apilayer.com/exchangerates_data/latest"
 
-        params = {
-            "base": "RUB",  # Базовая валюта: рубль
-            "symbols": str_symbols # Валюты для сравнения
-        }
+        params = {"base": "RUB", "symbols": str_symbols}  # Базовая валюта: рубль  # Валюты для сравнения
 
-        headers = {
-            "apikey": API_KEY_FOR_APILAYER  # Передаём ключ в заголовках
-        }
+        headers = {"apikey": API_KEY_FOR_APILAYER}  # Передаём ключ в заголовках
 
         try:
             logger.info(f"Запрос на получения данных с API {url}")
@@ -191,10 +187,7 @@ def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | 
             # Выводим курсы
             logger.info("Вывод курсов валют")
             for currency, rate in data["rates"].items():
-                result = {
-                "currency": currency,
-                "rate": round(1 / rate, 2) # Конвертируем в "1 USD = X RUB"
-                }
+                result = {"currency": currency, "rate": round(1 / rate, 2)}  # Конвертируем в "1 USD = X RUB"
                 return_currency.append(result)
                 logger.info("Добавление в список словаря с полученными курсами валют")
 
@@ -210,10 +203,10 @@ def get_now_currency(list_currency: list) -> list[Any] | list[dict[str, Any]] | 
 
 
 def read_json(path: str) -> Any:
-    """ Читает файл json и возвращает список словарей"""
+    """Читает файл json и возвращает список словарей"""
     try:
         logger.info(f"Чтение файла json по пути {path}")
-        with open(path, 'r') as file:
+        with open(path, "r") as file:
             reader = json.load(file)
             return reader
     except Exception as ex:
@@ -222,7 +215,7 @@ def read_json(path: str) -> Any:
 
 
 def get_stock_prices(list_stock: list) -> list[dict[str, Any]]:
-    """ Принимает список названий акций и возвращает словарь с ценами """
+    """Принимает список названий акций и возвращает словарь с ценами"""
     try:
         result = []
 
@@ -241,10 +234,7 @@ def get_stock_prices(list_stock: list) -> list[dict[str, Any]]:
             data = response.json()
 
             logger.info("Формирование словаря с полученными значениями цен акций")
-            tmp_dict_stocks = {
-                "stock": symbol,
-                "price": data['Global Quote']['05. price']
-            }
+            tmp_dict_stocks = {"stock": symbol, "price": data["Global Quote"]["05. price"]}
 
             logger.info("Добавление словаря к возвращаемому результату")
             result.append(tmp_dict_stocks)

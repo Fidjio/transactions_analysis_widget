@@ -5,14 +5,24 @@ from pandas import DataFrame
 from unittest.mock import patch
 import json
 
-from src.utils import read_json, get_stock_prices, get_now_currency, get_last_transactions, get_dict_info_card, \
-    calculate_cashback, get_last_digits, filter_by_date, open_xlsx_file, get_greeting
+from src.utils import (
+    read_json,
+    get_stock_prices,
+    get_now_currency,
+    get_last_transactions,
+    get_dict_info_card,
+    calculate_cashback,
+    get_last_digits,
+    filter_by_date,
+    open_xlsx_file,
+    get_greeting,
+)
 
 
 # Тесты для get_greeting()
 def test_get_greeting_morning():
     # Создаем mock-объект для datetime
-    with patch('datetime.datetime') as mock_datetime:
+    with patch("datetime.datetime") as mock_datetime:
         # Настраиваем mock чтобы now() возвращал нужное время
         mock_datetime.now.return_value = datetime(2023, 1, 1, 8, 0, 0)  # 8:00 утра
         assert get_greeting() == "Доброе утро"
@@ -67,7 +77,7 @@ def test_get_dict_info_card_success():
     transactions = [
         {"Номер карты": 1234567890, "Сумма операции с округлением": 100},
         {"Номер карты": 1234567890, "Сумма операции с округлением": 200},
-        {"Номер карты": 9876543210, "Сумма операции с округлением": 300}
+        {"Номер карты": 9876543210, "Сумма операции с округлением": 300},
     ]
     result = get_dict_info_card(transactions)
     assert result == {"7890": 300.0, "3210": 300.0}
@@ -77,7 +87,7 @@ def test_get_dict_info_card_success():
 def test_get_last_transactions():
     transactions = [
         {"Дата платежа": "01.01.2023", "Сумма операции с округлением": 100, "Категория": "A", "Описание": "Test1"},
-        {"Дата платежа": "02.01.2023", "Сумма операции с округлением": 200, "Категория": "B", "Описание": "Test2"}
+        {"Дата платежа": "02.01.2023", "Сумма операции с округлением": 200, "Категория": "B", "Описание": "Test2"},
     ]
     result = get_last_transactions(transactions)
     assert len(result) == 2
@@ -85,12 +95,11 @@ def test_get_last_transactions():
 
 
 # Тесты для get_now_currency()
-@patch('requests.get')
+@patch("requests.get")
 def test_get_now_currency_success(mock_get):
-    mock_response = type('MockResponse', (), {
-        'json': lambda: {"rates": {"USD": 0.014, "EUR": 0.012}},
-        'raise_for_status': lambda: None
-    })
+    mock_response = type(
+        "MockResponse", (), {"json": lambda: {"rates": {"USD": 0.014, "EUR": 0.012}}, "raise_for_status": lambda: None}
+    )
     mock_get.return_value = mock_response
 
     result = get_now_currency(["USD", "EUR"])
@@ -101,19 +110,20 @@ def test_get_now_currency_success(mock_get):
 # Тесты для read_json()
 def test_read_json_success(tmp_path):
     test_file = tmp_path / "test.json"
-    with open(test_file, 'w') as f:
+    with open(test_file, "w") as f:
         json.dump([{"test": "data"}], f)
     result = read_json(str(test_file))
     assert result == [{"test": "data"}]
 
 
 # Тесты для get_stock_prices()
-@patch('requests.get')
+@patch("requests.get")
 def test_get_stock_prices_success(mock_get):
-    mock_response = type('MockResponse', (), {
-        'json': lambda: {"Global Quote": {"05. price": "150.50"}},
-        'raise_for_status': lambda: None
-    })
+    mock_response = type(
+        "MockResponse",
+        (),
+        {"json": lambda: {"Global Quote": {"05. price": "150.50"}}, "raise_for_status": lambda: None},
+    )
     mock_get.return_value = mock_response
 
     result = get_stock_prices(["AAPL"])
