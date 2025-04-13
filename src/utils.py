@@ -1,14 +1,14 @@
 import json
-import os
-from typing import Any, Dict, List, Optional, Union
 import logging
-import pandas as pd
+import os
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Union
+
+import pandas as pd
 import requests
 from dotenv import load_dotenv
 from pandas.core.interchange.dataframe_protocol import DataFrame
-from pathlib import Path
-
 
 log_file = Path(__file__).parent.parent / "logs" / "utils.log"
 logger = logging.getLogger("utils")

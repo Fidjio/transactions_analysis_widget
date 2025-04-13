@@ -2,10 +2,11 @@ import json
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
+
 import pytest
 
-from src.views import get_info_for_page_main
 from src.utils import read_json
+from src.views import get_info_for_page_main
 
 
 def test_get_info_for_page_main_success(setup_test_environment, monkeypatch):

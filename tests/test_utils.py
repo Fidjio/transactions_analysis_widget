@@ -1,22 +1,13 @@
-import pytest
-from datetime import datetime
-import pandas as pd
-from pandas import DataFrame
-from unittest.mock import patch
 import json
+from datetime import datetime
+from unittest.mock import patch
 
-from src.utils import (
-    read_json,
-    get_stock_prices,
-    get_now_currency,
-    get_last_transactions,
-    get_dict_info_card,
-    calculate_cashback,
-    get_last_digits,
-    filter_by_date,
-    open_xlsx_file,
-    get_greeting,
-)
+import pandas as pd
+import pytest
+from pandas import DataFrame
+
+from src.utils import (calculate_cashback, filter_by_date, get_dict_info_card, get_greeting, get_last_digits,
+                       get_last_transactions, get_now_currency, get_stock_prices, open_xlsx_file, read_json)
 
 
 # Тесты для get_greeting()

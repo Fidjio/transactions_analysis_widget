@@ -2,17 +2,8 @@ import json
 import logging
 from pathlib import Path
 
-from src.utils import (
-    open_xlsx_file,
-    filter_by_date,
-    get_dict_info_card,
-    calculate_cashback,
-    get_last_transactions,
-    read_json,
-    get_now_currency,
-    get_stock_prices,
-    get_greeting,
-)
+from src.utils import (calculate_cashback, filter_by_date, get_dict_info_card, get_greeting, get_last_transactions,
+                       get_now_currency, get_stock_prices, open_xlsx_file, read_json)
 
 logger = logging.getLogger("views")
 logger.setLevel(logging.INFO)
